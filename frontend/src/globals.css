@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.bunny.net/css?family=geist-mono:100,200,300,400,500,600,700,800,900');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: rgb(249, 249, 249);
+    --foreground: rgb(32, 32, 32);
+    --card: rgb(252, 252, 252);
+    --card-foreground: rgb(32, 32, 32);
+    --popover: rgb(252, 252, 252);
+    --popover-foreground: rgb(32, 32, 32);
+    --primary: rgb(100, 74, 64);
+    --primary-foreground: rgb(255, 255, 255);
+    --secondary: rgb(255, 223, 181);
+    --secondary-foreground: rgb(88, 45, 29);
+    --muted: rgb(100, 89, 89);
+    --muted-foreground: rgb(100, 100, 100);
+    --accent: rgb(232, 232, 232);
+    --accent-foreground: rgb(32, 32, 32);
+    --destructive: rgb(229, 77, 46);
+    --destructive-foreground: rgb(255, 255, 255);
+    --border: rgb(216, 216, 216);
+    --input: rgb(216, 216, 216);
+    --ring: rgb(100, 74, 64);
+    --chart-1: rgb(100, 74, 64);
+    --chart-2: rgb(255, 223, 181);
+    --chart-3: rgb(232, 232, 232);
+    --chart-4: rgb(255, 230, 196);
+    --chart-5: rgb(102, 73, 62);
+    --sidebar: rgb(251, 251, 251);
+    --sidebar-foreground: rgb(37, 37, 37);
+    --sidebar-primary: rgb(52, 52, 52);
+    --sidebar-primary-foreground: rgb(251, 251, 251);
+    --sidebar-accent: rgb(247, 247, 247);
+    --sidebar-accent-foreground: rgb(52, 52, 52);
+    --sidebar-border: rgb(235, 235, 235);
+    --sidebar-ring: rgb(181, 181, 181);
+    --font-sans: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --radius: 0.5rem;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
+  }
+
+  .dark {
+    --background: rgb(17, 17, 17);
+    --foreground: rgb(238, 238, 238);
+    --card: rgb(25, 25, 25);
+    --card-foreground: rgb(238, 238, 238);
+    --popover: rgb(25, 25, 25);
+    --popover-foreground: rgb(238, 238, 238);
+    --primary: rgb(255, 224, 194);
+    --primary-foreground: rgb(8, 26, 27);
+    --secondary: rgb(57, 48, 40);
+    --secondary-foreground: rgb(255, 224, 194);
+    --muted: rgb(34, 34, 34);
+    --muted-foreground: rgb(180, 180, 180);
+    --accent: rgb(42, 42, 42);
+    --accent-foreground: rgb(238, 238, 238);
+    --destructive: rgb(229, 77, 46);
+    --destructive-foreground: rgb(255, 255, 255);
+    --border: rgb(32, 30, 24);
+    --input: rgb(72, 72, 72);
+    --ring: rgb(255, 224, 194);
+    --chart-1: rgb(255, 224, 194);
+    --chart-2: rgb(57, 48, 40);
+    --chart-3: rgb(42, 42, 42);
+    --chart-4: rgb(66, 56, 46);
+    --chart-5: rgb(255, 224, 193);
+    --sidebar: rgb(24, 24, 27);
+    --sidebar-foreground: rgb(244, 244, 245);
+    --sidebar-primary: rgb(29, 78, 216);
+    --sidebar-primary-foreground: rgb(255, 255, 255);
+    --sidebar-accent: rgb(39, 39, 42);
+    --sidebar-accent-foreground: rgb(244, 244, 245);
+    --sidebar-border: rgb(39, 39, 42);
+    --sidebar-ring: rgb(212, 212, 216);
+    --font-sans: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --radius: 0.5rem;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  html, body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    height: 100%;
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  /* Custom scrollbar styling */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Smooth scrolling */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  /* React Image Crop overrides for better UX */
+  .ReactCrop {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    touch-action: none;
+  }
+
+  .ReactCrop__crop-selection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate3d(0, 0, 0);
+    box-sizing: border-box;
+    cursor: move;
+    box-shadow: 0 0 0 9999em rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    touch-action: manipulation;
+    transition: all 0.1s ease;
+  }
+
+  .ReactCrop__drag-handle {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(0, 123, 255, 0.8);
+    border-radius: 50%;
+    box-sizing: border-box;
+    outline: 1px solid transparent;
+    transition: all 0.1s ease;
+  }
+
+  .ReactCrop__drag-handle:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    border-color: rgba(0, 123, 255, 1);
+    transform: scale(1.1);
+  }
+
+  .ReactCrop__drag-handle::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(0, 123, 255, 0.8);
+    border: 0;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    content: '';
+  }
+
+  .ReactCrop__image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+  }
+
+  /* Ensure proper aspect ratio handling */
+  .ReactCrop--aspect {
+    .ReactCrop__crop-selection {
+      border-color: #007bff;
+    }
+  }
+
+  /* Sidebar enhancements */
+  .sidebar-tooltip {
+    position: absolute;
+    left: 100%;
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background-color: hsl(var(--popover));
+    color: hsl(var(--popover-foreground));
+    font-size: 0.75rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    z-index: 50;
+    border: 1px solid hsl(var(--border));
+  }
+
+  .group:hover .sidebar-tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Smooth transitions for sidebar collapse */
+  .sidebar-collapse-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Enhanced scrollbar for sidebar */
+  .sidebar-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+
+  .sidebar-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .sidebar-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .sidebar-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  /* Landing page animations */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  .delay-1000 {
+    animation-delay: 1s;
+  }
+}

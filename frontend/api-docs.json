@@ -1,0 +1,3642 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "https://expense-tracker-1p6d.onrender.com",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Category Management",
+      "description": "Operations related to Category"
+    },
+    {
+      "name": "Ledger Management",
+      "description": "Operations related to Ledger"
+    },
+    {
+      "name": "Budget Management",
+      "description": "Operations related to Budget"
+    },
+    {
+      "name": "Expense Management",
+      "description": "Operations related to Expense"
+    },
+    {
+      "name": "Authentication Management",
+      "description": "APIs related to user authentication, authorization, OTP verification, and password management"
+    },
+    {
+      "name": "Profile Management",
+      "description": "APIs related to user profile operations such as profile picture upload and deletion"
+    }
+  ],
+  "paths": {
+    "/api/v1/categories/{id}": {
+      "put": {
+        "tags": [
+          "Category Management"
+        ],
+        "summary": "Update an existing category",
+        "description": "Updates the details of an existing category belonging to the authenticated user. Requires a valid authentication accessToken. Returns the updated CategoryResponse object on success.",
+        "operationId": "updateCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request (e.g., missing or malformed data)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - User is not authenticated",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found for the given id",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Category Management"
+        ],
+        "summary": "Delete a category",
+        "description": "Deletes an existing category belonging to the authenticated user. Requires a valid authentication accessToken. Returns no content on successful deletion.",
+        "operationId": "deleteCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Category deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized - User is not authenticated"
+          },
+          "404": {
+            "description": "Category not found for the given id"
+          }
+        }
+      }
+    },
+    "/api/v1/profile/profile-picture": {
+      "post": {
+        "tags": [
+          "Profile Management"
+        ],
+        "summary": "Upload profile picture",
+        "description": "Uploads or replaces the authenticated user's profile picture.\nOnly image files are allowed.\nThe previous profile picture (if any) will be replaced.\n",
+        "operationId": "uploadProfilePicture",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Profile picture file (jpg, jpeg, png)"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile picture uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePictureUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid file or unsupported file type",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePictureUploadResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePictureUploadResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "File size exceeds allowed limit",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePictureUploadResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Profile Management"
+        ],
+        "summary": "Delete profile picture",
+        "description": "Deletes the authenticated user's profile picture.\nIf no profile picture exists, operation is idempotent.\n",
+        "operationId": "deleteProfilePicture",
+        "responses": {
+          "200": {
+            "description": "Profile picture deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePictureDeleteResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePictureDeleteResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Profile picture not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePictureDeleteResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ledger/entry": {
+      "post": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "operationId": "createLedgerEntry",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LedgerEntryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LedgerEntryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ledger/contact": {
+      "post": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "summary": "Create a new Ledger user",
+        "description": "Creates a new Ledger user and return the created user",
+        "operationId": "createLedgerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LedgerUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Ledger User created successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LedgerUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LedgerUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized access",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LedgerUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/expenses": {
+      "get": {
+        "tags": [
+          "Expense Management"
+        ],
+        "summary": "Get expenses",
+        "description": "Fetches a paginated list of expenses for the authenticated user. Supports pagination, sorting, and optional filtering by date range and category.",
+        "operationId": "getExpenses",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number (0 Based)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0,
+              "minimum": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Number of items to be returned in a page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 10
+            },
+            "example": 10
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Sort by field",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "createdDate"
+            },
+            "example": "createdDate"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "description": "Sort direction",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "desc"
+            },
+            "example": "desc"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Start date filter (YYYY-MM-DD)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "example": "2025-01-01"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "End date filter (YYYY-MM-DD)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "example": "2025-12-31"
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "Category ID filter",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved expenses",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "User is not authenticated",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User not authorized to access these expenses",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageExpenseResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Expense Management"
+        ],
+        "summary": "Create a new expense",
+        "description": "creates a new expense entry for the authenticated user.",
+        "operationId": "createExpense",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpenseRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Expense created successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error in request body",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – missing or invalid accessToken",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "tags": [
+          "Category Management"
+        ],
+        "summary": "Get categories of the logged in user",
+        "description": "Fetches a CategoryResponse Object from the database. With a default page value 0 & page size 10",
+        "operationId": "getCategories",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categories created by the logged in user",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Category Management"
+        ],
+        "summary": "Create a new Category for the logged in user",
+        "description": "Creates a new category associated with the authenticated user. Requires a valid authentication accessToken.\nReturns the created CategoryResponse object on success.\n",
+        "operationId": "createCategory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Category created successfully.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/budgets/monthly": {
+      "post": {
+        "tags": [
+          "Budget Management"
+        ],
+        "summary": "Set a monthly budget for the logged-in user",
+        "description": "Creates a new monthly budget associated with the authenticated user. Requires a valid authentication accessToken. Returns the created BudgetResponse object on success.",
+        "operationId": "setMonthlyBudget",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BudgetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Monthly budget created successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request (e.g., missing or malformed data)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - User is not authenticated",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/budgets/default": {
+      "get": {
+        "tags": [
+          "Budget Management"
+        ],
+        "summary": "Get the default budget of the logged-in user",
+        "description": "Fetches the default budget associated with the authenticated user. Requires a valid authentication accessToken. Returns the BudgetResponse object if a default budget is set.",
+        "operationId": "getDefaultBudget",
+        "responses": {
+          "200": {
+            "description": "Default budget retrieved successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - User is not authenticated",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No default budget found for the user",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Budget Management"
+        ],
+        "summary": "Set a default budget for the logged-in user",
+        "description": "Creates or updates the default budget for the authenticated user. Requires a valid authentication accessToken. Returns the BudgetResponse object representing the default budget.",
+        "operationId": "setDefaultBudget",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BudgetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Default budget set successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request (e.g., missing or malformed data)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - User is not authenticated",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/verify": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Verify OTP",
+        "description": "Verifies the one-time password (OTP) for a given accessToken. Returns verification status and related details.",
+        "operationId": "verifyOtp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OtpVerifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OTP verified successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired OTP",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "OTP verification not allowed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error during verification",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/reset-password": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Reset password",
+        "description": "Resets user password using a valid reset token.\nTypically used after initiating the forgot password flow.\n",
+        "operationId": "resetPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid reset token or password",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Reset token expired or invalid",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/resend-otp": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Resend OTP",
+        "description": "Resends a new OTP to the specified email address if the previous OTP expired or was not received.",
+        "operationId": "resendOtp",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OTP resent successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpResendResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email format or missing email parameter",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpResendResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User with the given email not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpResendResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many OTP resend attempts",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpResendResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error while resending OTP",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/OtpResendResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Register a new user",
+        "description": "Creates a new user account with the provided registration details. Returns the registered user information upon successful creation.",
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User with the same email/username already exists.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh/web": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Refresh access token (Web)",
+        "description": "Generates a new access token using refresh token\nstored in HttpOnly cookies.\n",
+        "operationId": "refreshWebToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Access token refreshed successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebRefreshResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid refresh token",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebRefreshResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh/mobile": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Refresh access token (Mobile)",
+        "description": "Generates new access and refresh tokens using a valid refresh token.\n",
+        "operationId": "refreshMobileToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Token refreshed successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MobileRefreshResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or expired refresh token",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MobileRefreshResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "User Login",
+        "description": "Authenticates a user with their credentials. Returns an access accessToken and a refresh accessToken on successful authentication.",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid username or password",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login/web": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "User Login for web",
+        "description": " Authenticates user credentials for web applications.\n        - Access token is returned in response body\n        - Refresh token is stored in an HttpOnly cookie\n",
+        "operationId": "loginWeb",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "headers": {
+              "Set-Cookie": {
+                "description": "HttpOnly refresh token cookie",
+                "style": "simple",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebLoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebLoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid username or password",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebLoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login/mobile": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "User login (Mobile)",
+        "description": "Authenticates user for mobile clients.\nAccess and refresh tokens are returned in response body.\n",
+        "operationId": "loginMobile",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MobileLoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/google": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Login with Google",
+        "description": "Authenticates or registers a user using Google OAuth.\nAccepts a Google ID token obtained from the frontend.\n",
+        "operationId": "loginWithGoogle",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleLoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Google login successful",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Google ID token",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Google authentication failed",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Forgot password",
+        "description": "Initiates the password reset flow.\nSends a password reset link or OTP to the registered email address.\nThis endpoint is public.\n",
+        "operationId": "forgotPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset instructions sent successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email format",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User with given email not found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ledger/entry/{id}": {
+      "get": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "operationId": "getLedgerEntry",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LedgerEntryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "operationId": "deleteLedgerEntry",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "operationId": "updateLedgerEntry",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LedgerEntryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LedgerEntryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ledger/contact/{id}": {
+      "delete": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "operationId": "deleteLedgerUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "summary": "Update existing Ledger user",
+        "description": "Updates a existing ledger user and return the updated user",
+        "operationId": "updateLedgerUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LedgerUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Ledger user updated successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LedgerUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/expenses/{id}": {
+      "get": {
+        "tags": [
+          "Expense Management"
+        ],
+        "summary": "Get expense by ID",
+        "description": "Retrieves the details of a specific expense belonging to the authenticated user.",
+        "operationId": "getExpenseById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expense found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied (must be positive)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – missing or invalid accessToken",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – user not allowed to access this expense",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Expense not found for the given ID",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Expense Management"
+        ],
+        "summary": "Delete an expense",
+        "description": "Deletes an expense for the authenticated user based on the provided expense ID.",
+        "operationId": "deleteExpense",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Expense deleted successfully"
+          },
+          "400": {
+            "description": "Invalid expense ID supplied"
+          },
+          "401": {
+            "description": "User is not authenticated"
+          },
+          "403": {
+            "description": "User not authorized to delete this expense"
+          },
+          "404": {
+            "description": "Expense not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Expense Management"
+        ],
+        "summary": "Update an existing expense",
+        "description": "Updates an existing expense belonging to the authenticated user.",
+        "operationId": "updateExpense",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExpenseUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Expense updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input (e.g., bad request body or negative ID)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized – missing or invalid accessToken",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden – user not allowed to update this expense",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Expense not found for the given ID",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict – update not allowed due to business rule violation",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/change-password": {
+      "patch": {
+        "tags": [
+          "Authentication Management"
+        ],
+        "summary": "Change password",
+        "description": "Allows an authenticated user to change their password",
+        "operationId": "changePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "getUserDetailsAfterLogin",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/yearly": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getYearlyReport",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/YearlyReportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/yearly/export": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getYearlyReport_1",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PDF",
+                "EXCEL"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/top-expenses": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getTopExpenses",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopExpenseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/monthly": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getMonthlyReport",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlyReportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/monthly/export": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getMonthlyReport_1",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PDF",
+                "EXCEL"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/insights": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getInsights",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsightResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/daily-expenses": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getDailyExpenseByDate",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DailyExpenseResponse"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/custom/export": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getYearlyReport_2",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PDF",
+                "EXCEL"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports/category-wise": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getMonthlyReportByCategory",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryWiseMonthlyExpenseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ledger/contacts": {
+      "get": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "operationId": "getAllContacts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LedgerUserEntryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ledger/contacts/{ledgerUser}/entries": {
+      "get": {
+        "tags": [
+          "Ledger Management"
+        ],
+        "operationId": "getUserTransactions",
+        "parameters": [
+          {
+            "name": "ledgerUser",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LedgerEntryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/budgets": {
+      "get": {
+        "tags": [
+          "Budget Management"
+        ],
+        "summary": "Get budget for the current month or Get the default budget",
+        "description": "Fetches a user BudgetResponse Object from the database using the provided month",
+        "operationId": "getBudget",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Any ISO date within the target month",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "example": "2025-01-01"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BudgetResponse object for the provided month",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/budgets/overrides": {
+      "get": {
+        "tags": [
+          "Budget Management"
+        ],
+        "summary": "Get all override budgets of the logged-in user",
+        "description": "Fetches a paginated list of override budgets created by the authenticated user. Requires a valid authentication accessToken. Defaults to page=0 and size=10 if not provided.",
+        "operationId": "getAllOverrideBudgets",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of override budgets retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - User is not authenticated",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageBudgetResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/budgets/history": {
+      "get": {
+        "tags": [
+          "Budget Management"
+        ],
+        "summary": "Get user's historical budgets",
+        "description": "Fetches paginated budget history for the authenticated user.",
+        "operationId": "getAllHistoryBudgets",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved budget history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BudgetResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageBudgetResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - User not allowed to access this resource",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageBudgetResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/budgets/monthly/{month}": {
+      "delete": {
+        "tags": [
+          "Budget Management"
+        ],
+        "summary": "Delete monthly budget",
+        "description": "Permanently deletes the budget for the specified month for the authenticated user.\nThe `month` path variable must be an ISO-8601 date (`yyyy-MM-dd`).\nRecommended: use the first day of the month (e.g., `2025-08-01`).\n",
+        "operationId": "deleteMonthlyBudget",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "path",
+            "description": "Any ISO date within the target month",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "example": "2025-01-01"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Budget deleted successfully"
+          },
+          "400": {
+            "description": "Invalid month format or month out of allowed range"
+          },
+          "401": {
+            "description": "Unauthorized – missing or invalid accessToken"
+          },
+          "403": {
+            "description": "Forbidden – user not allowed to delete this budget"
+          },
+          "404": {
+            "description": "Budget for the given month not found"
+          },
+          "409": {
+            "description": "Conflict – deletion blocked by business rule (e.g., locked/approved month)"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CategoryResponse": {
+        "type": "object",
+        "description": "Data transfer object for Category Response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Category id",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Category name",
+            "example": "FOOD"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Category icon",
+            "example": "🍲"
+          }
+        }
+      },
+      "ProblemDetail": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string",
+            "format": "uri"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "CategoryRequest": {
+        "type": "object",
+        "description": "Data transfer object for Category Requests",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Category name",
+            "example": "FOOD"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Category icon",
+            "example": "🍲"
+          }
+        }
+      },
+      "ProfilePictureUploadResponse": {
+        "type": "object",
+        "description": "Data transfer object for Profile Picture Upload Response",
+        "properties": {
+          "profilePictureUrl": {
+            "type": "string",
+            "description": "Profile picture url",
+            "example": "https://example.com/profile.jpg"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "example": "Profile picture uploaded successfully"
+          }
+        }
+      },
+      "LedgerEntryRequest": {
+        "type": "object",
+        "description": "Data Transfer Object for creating new Ledger",
+        "properties": {
+          "ledgerUserId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Ledger user id",
+            "example": 1
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount",
+            "example": 100
+          },
+          "type": {
+            "type": "string",
+            "description": "Entry type",
+            "enum": [
+              "DEBIT",
+              "CREDIT"
+            ],
+            "example": "CREDIT"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description",
+            "example": "Lend money for phone",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Created date",
+            "example": "2025-01-01T00:00:00"
+          }
+        },
+        "required": [
+          "amount",
+          "type"
+        ]
+      },
+      "LedgerEntryResponse": {
+        "type": "object",
+        "description": "Data Transfer Object for Ledger Entry Response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Ledger entry id",
+            "example": 1
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount",
+            "example": 100
+          },
+          "type": {
+            "type": "string",
+            "description": "Entry type",
+            "enum": [
+              "DEBIT",
+              "CREDIT"
+            ],
+            "example": "CREDIT"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description",
+            "example": "Lend money for phone"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Created date",
+            "example": "2025-01-01T00:00:00"
+          }
+        }
+      },
+      "LedgerUserResponse": {
+        "type": "object",
+        "description": "Data Transfer Object for Ledger User Response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Ledger user id",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Ledger user name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "Ledger user email",
+            "example": "johndoe@example.com"
+          }
+        }
+      },
+      "LedgerUserRequest": {
+        "type": "object",
+        "description": "Data Transfer Object for creating new Ledger User",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Ledger user name",
+            "example": "John Doe",
+            "maxLength": 50,
+            "minLength": 3
+          },
+          "email": {
+            "type": "string",
+            "description": "Ledger user email",
+            "example": "johndoe@example.com"
+          }
+        },
+        "required": [
+          "email",
+          "name"
+        ]
+      },
+      "ExpenseResponseDTO": {
+        "type": "object",
+        "description": "Data transfer object for Expense Response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Expense id",
+            "example": 1
+          },
+          "expenseName": {
+            "type": "string",
+            "description": "Expense name",
+            "example": "Biryani"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Expense amount",
+            "example": 100
+          },
+          "categoryName": {
+            "type": "string",
+            "description": "Expense category id",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "description": "Expense description",
+            "example": "Food at D Bapi Biryani"
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "Expense Payment Method",
+            "enum": [
+              "UPI",
+              "CASH",
+              "CARD",
+              "OTHER"
+            ],
+            "example": "UPI"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Expense created date",
+            "example": "2025-08-03"
+          },
+          "createdTime": {
+            "$ref": "#/components/schemas/LocalTime",
+            "description": "Expense created time",
+            "example": "12:00:00"
+          }
+        }
+      },
+      "LocalTime": {
+        "type": "object",
+        "properties": {
+          "hour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minute": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "second": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nano": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ExpenseRequestDTO": {
+        "type": "object",
+        "description": "Data transfer object for Expense Request",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Expense amount",
+            "example": 100
+          },
+          "expenseName": {
+            "type": "string",
+            "description": "Expense name",
+            "example": "Biryani"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Expense category id",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "description": "Expense description",
+            "example": "Food at D Bapi Biryani"
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "Expense Payment Method",
+            "enum": [
+              "UPI",
+              "CASH",
+              "CARD",
+              "OTHER"
+            ],
+            "example": "CASH"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Expense created date",
+            "example": "2025-08-03"
+          },
+          "createdTime": {
+            "$ref": "#/components/schemas/LocalTime",
+            "description": "Expense created time",
+            "example": "12:00:00"
+          }
+        },
+        "required": [
+          "categoryId",
+          "expenseName",
+          "paymentMethod"
+        ]
+      },
+      "BudgetResponse": {
+        "type": "object",
+        "description": "Data transfer object for Budget Response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Budget id",
+            "example": 1
+          },
+          "amount": {
+            "type": "number",
+            "description": "Budget amount",
+            "example": 10000
+          },
+          "month": {
+            "type": "string",
+            "format": "date",
+            "description": "Budget month",
+            "example": "2025-01"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Is budget default",
+            "example": true
+          }
+        }
+      },
+      "BudgetRequest": {
+        "type": "object",
+        "description": "Data transfer object for Budget Requests",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "description": "Budget amount of the month",
+            "example": 10000
+          },
+          "month": {
+            "type": "string",
+            "format": "date",
+            "description": "Budget of the month",
+            "example": "2025-01"
+          }
+        }
+      },
+      "VerifyResponse": {
+        "type": "object",
+        "description": "Data transfer object for Verification Response",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "example": "Verification successful"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "100 CONTINUE",
+              "101 SWITCHING_PROTOCOLS",
+              "102 PROCESSING",
+              "103 EARLY_HINTS",
+              "103 CHECKPOINT",
+              "200 OK",
+              "201 CREATED",
+              "202 ACCEPTED",
+              "203 NON_AUTHORITATIVE_INFORMATION",
+              "204 NO_CONTENT",
+              "205 RESET_CONTENT",
+              "206 PARTIAL_CONTENT",
+              "207 MULTI_STATUS",
+              "208 ALREADY_REPORTED",
+              "226 IM_USED",
+              "300 MULTIPLE_CHOICES",
+              "301 MOVED_PERMANENTLY",
+              "302 FOUND",
+              "302 MOVED_TEMPORARILY",
+              "303 SEE_OTHER",
+              "304 NOT_MODIFIED",
+              "305 USE_PROXY",
+              "307 TEMPORARY_REDIRECT",
+              "308 PERMANENT_REDIRECT",
+              "400 BAD_REQUEST",
+              "401 UNAUTHORIZED",
+              "402 PAYMENT_REQUIRED",
+              "403 FORBIDDEN",
+              "404 NOT_FOUND",
+              "405 METHOD_NOT_ALLOWED",
+              "406 NOT_ACCEPTABLE",
+              "407 PROXY_AUTHENTICATION_REQUIRED",
+              "408 REQUEST_TIMEOUT",
+              "409 CONFLICT",
+              "410 GONE",
+              "411 LENGTH_REQUIRED",
+              "412 PRECONDITION_FAILED",
+              "413 PAYLOAD_TOO_LARGE",
+              "413 REQUEST_ENTITY_TOO_LARGE",
+              "414 URI_TOO_LONG",
+              "414 REQUEST_URI_TOO_LONG",
+              "415 UNSUPPORTED_MEDIA_TYPE",
+              "416 REQUESTED_RANGE_NOT_SATISFIABLE",
+              "417 EXPECTATION_FAILED",
+              "418 I_AM_A_TEAPOT",
+              "419 INSUFFICIENT_SPACE_ON_RESOURCE",
+              "420 METHOD_FAILURE",
+              "421 DESTINATION_LOCKED",
+              "422 UNPROCESSABLE_ENTITY",
+              "423 LOCKED",
+              "424 FAILED_DEPENDENCY",
+              "425 TOO_EARLY",
+              "426 UPGRADE_REQUIRED",
+              "428 PRECONDITION_REQUIRED",
+              "429 TOO_MANY_REQUESTS",
+              "431 REQUEST_HEADER_FIELDS_TOO_LARGE",
+              "451 UNAVAILABLE_FOR_LEGAL_REASONS",
+              "500 INTERNAL_SERVER_ERROR",
+              "501 NOT_IMPLEMENTED",
+              "502 BAD_GATEWAY",
+              "503 SERVICE_UNAVAILABLE",
+              "504 GATEWAY_TIMEOUT",
+              "505 HTTP_VERSION_NOT_SUPPORTED",
+              "506 VARIANT_ALSO_NEGOTIATES",
+              "507 INSUFFICIENT_STORAGE",
+              "508 LOOP_DETECTED",
+              "509 BANDWIDTH_LIMIT_EXCEEDED",
+              "510 NOT_EXTENDED",
+              "511 NETWORK_AUTHENTICATION_REQUIRED"
+            ]
+          }
+        }
+      },
+      "OtpVerifyRequest": {
+        "type": "object",
+        "description": "Data transfer object for OTP Verification Request",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Verification accessToken"
+          },
+          "otp": {
+            "type": "string",
+            "description": "OTP"
+          }
+        }
+      },
+      "ResetPasswordResponse": {
+        "type": "object",
+        "description": "Data transfer object for Reset Password Response",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "example": "Password reset successfully"
+          }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "description": "Data transfer object for Reset Password Request",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "id"
+          },
+          "token": {
+            "type": "string",
+            "description": "Reset token"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "New password"
+          }
+        }
+      },
+      "OtpResendResponse": {
+        "type": "object",
+        "description": "Data transfer object for OTP Resend Response",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "example": "OTP resent successfully"
+          },
+          "verificationUrl": {
+            "type": "string",
+            "description": "Verification URL"
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "description": "Data transfer object for Register Response",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "example": "Registration successful"
+          },
+          "verificationToken": {
+            "type": "string",
+            "description": "Verification URL"
+          }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "description": "Data transfer object for Register Request",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "User name",
+            "example": "johndoe"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "WebRefreshResponse": {
+        "type": "object",
+        "description": "Data transfer object for Web Refresh response",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "accessToken for authentication"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "refreshToken to get accessToken in future"
+          }
+        }
+      },
+      "RefreshRequest": {
+        "type": "object",
+        "description": "Data transfer object for Refresh Request",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh accessToken"
+          }
+        }
+      },
+      "MobileRefreshResponse": {
+        "type": "object",
+        "description": "Data transfer object for Mobile Refresh response",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Access accessToken"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh accessToken"
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "description": "Data transfer object for Login Response",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "JWT accessToken"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh JWT accessToken"
+          },
+          "username": {
+            "type": "string",
+            "description": "User name"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "description": "Data transfer object for Login Request",
+        "properties": {
+          "userIdentifier": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password",
+            "example": "verystrongpassword@4321"
+          }
+        }
+      },
+      "WebLoginResponse": {
+        "type": "object",
+        "description": "Data transfer object for Web Login response",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "accessToken for authentication"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "refreshToken to get accessToken, refreshToken in future"
+          },
+          "username": {
+            "type": "string",
+            "description": "User name"
+          }
+        }
+      },
+      "MobileLoginResponse": {
+        "type": "object",
+        "description": "Data transfer object for Mobile Login Response",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Access accessToken"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh accessToken"
+          },
+          "username": {
+            "type": "string",
+            "description": "User name"
+          }
+        }
+      },
+      "GoogleLoginRequest": {
+        "type": "object",
+        "description": "Request payload for Google OAuth2 login",
+        "properties": {
+          "idToken": {
+            "type": "string",
+            "description": "Google ID accessToken received from client",
+            "example": "eyJhbGciOiJSUzI1NiIs..."
+          }
+        }
+      },
+      "ForgotPasswordResponse": {
+        "type": "object",
+        "description": "Data transfer object for Forgot Password Response",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Forgot Password Message",
+            "example": "Password reset email sent successfully"
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "description": "Data transfer object for Forgot Password Request",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email of the user the password should be reset",
+            "example": "johndoe@example.com"
+          }
+        }
+      },
+      "ExpenseUpdateRequest": {
+        "type": "object",
+        "description": "Data transfer object for Expense Update Request",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Expense amount",
+            "example": 100
+          },
+          "expenseName": {
+            "type": "string",
+            "description": "Expense name",
+            "example": "Biryani"
+          },
+          "description": {
+            "type": "string",
+            "description": "Expense description",
+            "example": "Food at D Bapi Biryani"
+          },
+          "categoryId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Expense category id",
+            "example": 1
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "Expense Payment Method",
+            "enum": [
+              "UPI",
+              "CASH",
+              "CARD",
+              "OTHER"
+            ],
+            "example": "CASH"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Expense created date",
+            "example": "2025-08-03"
+          },
+          "createdTime": {
+            "$ref": "#/components/schemas/LocalTime",
+            "description": "Expense created time",
+            "example": "12:00:00"
+          }
+        }
+      },
+      "ChangePasswordResponse": {
+        "type": "object",
+        "description": "Data transfer object for Change Password Response",
+        "properties": {
+          "isPasswordChanged": {
+            "type": "boolean",
+            "description": "True if password changed successfully",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "example": "Password changed successfully"
+          }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "description": "Data transfer object for Change Password Request",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "description": "Old password of the user",
+            "example": "veryHardPassword@123"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "New password",
+            "example": "veryVeryHardPassword@123"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "description": "Data transfer object for User",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "username",
+            "example": "johndoe"
+          },
+          "email": {
+            "type": "string",
+            "description": "email"
+          },
+          "currency": {
+            "type": "string",
+            "description": "currency",
+            "example": "INR"
+          },
+          "avatarUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "MonthlyYearResponse": {
+        "type": "object",
+        "description": "Data transfer object for Monthly year response",
+        "properties": {
+          "budget": {
+            "type": "number",
+            "format": "double",
+            "description": "Budget of the month",
+            "example": 12000
+          },
+          "totalExpenses": {
+            "type": "number",
+            "format": "double",
+            "description": "Total expenses of the month",
+            "example": 10000
+          },
+          "netSavings": {
+            "type": "number",
+            "format": "double",
+            "description": "Total savings of the month",
+            "example": 2000
+          }
+        }
+      },
+      "YearlyReportResponse": {
+        "type": "object",
+        "description": "Yearly report response",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Year",
+            "example": 2025
+          },
+          "monthlyReports": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/MonthlyYearResponse"
+            },
+            "description": "Month wise report response"
+          }
+        }
+      },
+      "CategoryWiseTopExpenseResponse": {
+        "type": "object",
+        "description": "Data transfer object for Category wise top expense response",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category",
+            "example": "FOOD"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount",
+            "example": 10000
+          },
+          "percentage": {
+            "type": "number",
+            "format": "double",
+            "description": "Percentage",
+            "example": 10
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon",
+            "example": "🍲"
+          }
+        }
+      },
+      "TopExpenseResponse": {
+        "type": "object",
+        "description": "Top expense response",
+        "properties": {
+          "month": {
+            "type": "string",
+            "description": "Month",
+            "example": "January"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Year",
+            "example": 2025
+          },
+          "topExpenses": {
+            "type": "array",
+            "description": "Category Wise Top expense response",
+            "items": {
+              "$ref": "#/components/schemas/CategoryWiseTopExpenseResponse"
+            }
+          }
+        }
+      },
+      "MonthlyReportResponse": {
+        "type": "object",
+        "description": "Data transfer object for Monthly Report Response",
+        "properties": {
+          "month": {
+            "type": "string",
+            "description": "Month",
+            "example": "January"
+          },
+          "budget": {
+            "type": "number",
+            "format": "double",
+            "description": "Budget",
+            "example": 12000
+          },
+          "totalExpenses": {
+            "type": "number",
+            "format": "double",
+            "description": "Total Expenses",
+            "example": 10000
+          },
+          "netSavings": {
+            "type": "number",
+            "format": "double",
+            "description": "Total Savings",
+            "example": 2000
+          }
+        }
+      },
+      "InsightResponse": {
+        "type": "object",
+        "description": "Insight of Every Month",
+        "properties": {
+          "month": {
+            "type": "string",
+            "description": "Month",
+            "example": "January"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Year",
+            "example": 2025
+          },
+          "mostExpensiveDay": {
+            "type": "string",
+            "format": "date",
+            "description": "Most Expensive Day of the Month",
+            "example": "2025-01-01"
+          },
+          "amountOnMostExpensiveDay": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount spent on most expensive day",
+            "example": 2390
+          },
+          "averageDailySpending": {
+            "type": "number",
+            "format": "double",
+            "description": "Average Daily Spending",
+            "example": 1000
+          },
+          "expensiveCategory": {
+            "type": "string",
+            "description": "Category with most spending",
+            "example": "FOOD"
+          },
+          "expensiveCategorySpending": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount spent on most expensive category",
+            "example": 1000
+          },
+          "totalSpending": {
+            "type": "number",
+            "format": "double",
+            "description": "Total Spending",
+            "example": 1000
+          }
+        }
+      },
+      "DailyExpenseResponse": {
+        "type": "object",
+        "description": "Daily expense response",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Expense id",
+            "example": 1
+          },
+          "expenseName": {
+            "type": "string",
+            "description": "Expense Name",
+            "example": "Biryani"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Expense amount",
+            "example": 10000
+          },
+          "category": {
+            "type": "string",
+            "description": "Expense category",
+            "example": "FOOD"
+          },
+          "description": {
+            "type": "string",
+            "description": "Expense description",
+            "example": "Food at D Bapi Biryani"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Expense created date",
+            "example": "2025-08-03"
+          },
+          "createdAtTime": {
+            "$ref": "#/components/schemas/LocalTime",
+            "description": "Expense created time",
+            "example": "12:00:00"
+          }
+        }
+      },
+      "CategoryExpenseResponse": {
+        "type": "object",
+        "description": "Data transfer object for Category wise expense response",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category",
+            "example": "Food"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount",
+            "example": 10000
+          },
+          "percentage": {
+            "type": "number",
+            "format": "double",
+            "description": "Percentage",
+            "example": 10
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon",
+            "example": "🍲"
+          }
+        }
+      },
+      "CategoryWiseMonthlyExpenseResponse": {
+        "type": "object",
+        "description": "Category wise monthly expense response",
+        "properties": {
+          "month": {
+            "type": "string",
+            "description": "Month",
+            "example": "September-2025"
+          },
+          "categoryWiseExpenses": {
+            "type": "array",
+            "description": "Category wise expense response",
+            "items": {
+              "$ref": "#/components/schemas/CategoryExpenseResponse"
+            }
+          }
+        }
+      },
+      "LedgerUserEntryResponse": {
+        "type": "object",
+        "description": "Data Transfer Object for Ledger User Entry",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Ledger user id",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Ledger user name",
+            "example": "John Doe"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "Profile image link if exists"
+          },
+          "email": {
+            "type": "string",
+            "description": "Ledger user email",
+            "example": "johondoe@example.com"
+          },
+          "totalAmount": {
+            "type": "number",
+            "description": "Total amount (Credit - Debit)",
+            "example": 1000
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last updated date",
+            "example": "2025-01-01T00:00:00"
+          }
+        }
+      },
+      "PageExpenseResponseDTO": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExpenseResponseDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paged": {
+            "type": "boolean"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unpaged": {
+            "type": "boolean"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "unsorted": {
+            "type": "boolean"
+          },
+          "sorted": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageBudgetResponse": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BudgetResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ProfilePictureDeleteResponse": {
+        "type": "object",
+        "description": "Data transfer object for Profile Picture Delete Response",
+        "properties": {
+          "deleted": {
+            "type": "boolean",
+            "description": "Is profile picture deleted",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "example": "Profile picture deleted successfully"
+          }
+        }
+      }
+    }
+  }
+}
