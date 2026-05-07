@@ -4,7 +4,7 @@ import { getAuthToken, setAuthToken, clearAuthToken, clearRefreshToken, getRefre
 
 const envBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "";
 const normalizedEnvBaseUrl = envBaseUrl ? envBaseUrl.replace(/\/$/, "") : "";
-const apiBaseUrl = normalizedEnvBaseUrl || "/api/v1";
+const apiBaseUrl = import.meta.env.DEV ? "/api/v1" : normalizedEnvBaseUrl || "/api/v1";
 
 const api = axios.create({
   baseURL: apiBaseUrl,

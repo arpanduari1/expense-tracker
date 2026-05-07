@@ -25,7 +25,7 @@ import type {
 // Determine the API base URL (same logic as api.ts)
 const envBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "";
 const normalizedEnvBaseUrl = envBaseUrl ? envBaseUrl.replace(/\/$/, "") : "";
-const authApiBaseUrl = normalizedEnvBaseUrl || "/api/v1";
+const authApiBaseUrl = import.meta.env.DEV ? "/api/v1" : normalizedEnvBaseUrl || "/api/v1";
 
 // Login service
 export const login = async (credentials: LoginRequest): Promise<LoginResponse> => {

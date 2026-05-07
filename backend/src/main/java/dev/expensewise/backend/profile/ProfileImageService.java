@@ -74,7 +74,7 @@ public class ProfileImageService {
             File pngImage = Jadenticon.from(username).withSize(400).png(fileName);
             byte[] pngBytes = FileUtils.readFileToByteArray(pngImage);
             return new InMemoryMultipartFile(pngBytes, "avatar", fileName, "image/png");
-        } catch (IOException | TranscoderException e) {
+        } catch (IOException | TranscoderException ex) {
             throw new RuntimeException("Failed to create profile image.");
         }
     }
