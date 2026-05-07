@@ -1,9 +1,7 @@
 services:
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: arpanduari26/expense-tracker:latest
     container_name: expense-backend
     restart: unless-stopped
     ports:
