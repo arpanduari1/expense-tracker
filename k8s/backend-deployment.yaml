@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: backend
+  namespace: expense-tracker
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+
+    spec:
+      containers:
+        - name: backend
+          image: arpanduari26/expense-tracker:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+
+          envFrom:
+            - secretRef:
+                name: backend-secret

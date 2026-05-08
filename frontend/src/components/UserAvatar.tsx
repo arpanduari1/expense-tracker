@@ -65,7 +65,7 @@ export const UserAvatar = ({ src, username, size = 40, className }: UserAvatarPr
         // Clean the src path and construct proper URL
         const cleanSrc = src.startsWith('/') ? src : `/${src}`;
         // Use the API base URL for relative paths
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '/api/v1';
         imageUrl = new URL(cleanSrc, apiBaseUrl).toString();
       }
 
