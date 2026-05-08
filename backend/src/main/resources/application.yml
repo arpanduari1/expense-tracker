@@ -81,12 +81,12 @@ app:
     profile-event: profileEventQueue
 
   frontend:
-    path: https://expensewise2025.netlify.app
+    path: ${FRONTEND_URL:http://localhost}
 
   logo: https://i.imghippo.com/files/SuCD1097ccM.png
   static-logo: expense-wise-logo.png
   cors:
-    allowed-origins: "https://expensewise2025.netlify.app, http://localhost:3000, http://localhost:3001"
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
 
   android:
     deeplink:
@@ -103,4 +103,4 @@ app:
       service-account-json: ${FIREBASE_SERVICE_ACCOUNT}
 
   backend:
-    path: https://expense-tracker-1p6d.onrender.com
+    path: ${BACKEND_URL:http://localhost}
